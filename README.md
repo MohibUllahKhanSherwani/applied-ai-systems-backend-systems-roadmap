@@ -8,10 +8,10 @@ Phase 0 focuses on the boundaries of Large Language Models and the transition fr
 
 ## 🛠 1. Strategic Skepticism: Rules for Reliability
 
-LLMs are "dodgy collaborators"—capable but inherently unreliable. To build enterprise systems, you must treat them as probabilistic components inside a deterministic harness.
+LLMs are "dodgy collaborators", capable but inherently unreliable. To build enterprise systems, you must treat them as probabilistic components inside a deterministic harness.
 
 ### 📜 Core Engineering Rules
-1.  **The Calibration Hack**: Use self-evaluation loops. Ask the model to propose an answer, then ask for the probability that its own answer is correct ($P(\text{True})$).
+1.  **The Calibration Hack**: Use self-evaluation loops. Ask the model to propose an answer, then ask for the probability that its own answer is correct.
 2.  **Deterministic Wrappers**: Never let raw LLM output touch your core business logic. Wrap outputs in **Pydantic schemas** and **Guardrails** to enforce syntax and factual constraints.
 3.  **The Uncertainty Threshold**: Larger models are better calibrated than smaller ones but are prone to **overconfidence** in high-entropy scenarios. If a model is 99% confident but the task is open-ended, verify it.
 
