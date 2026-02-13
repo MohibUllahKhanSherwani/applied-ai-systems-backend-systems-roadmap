@@ -32,9 +32,12 @@ graph TD
     ML --> |Unstructured Text?| SLM[Fine-tuned SLMs]
     SLM --> |Complex Reasoning?| LLM[General LLMs]
 
-    style LLM fill:#f96,stroke:#333,stroke-width:2px
-    style Simple fill:#bbf,stroke:#333,stroke-width:2px
-    style ML fill:#bfb,stroke:#333,stroke-width:2px
+    %% Color Definitions
+    style Start fill:#f8fafc,stroke:#64748b,stroke-width:2px,color:#334155
+    style Simple fill:#f1f5f9,stroke:#94a3b8,stroke-width:2px,color:#1e293b
+    style ML fill:#dcfce7,stroke:#22c55e,stroke-width:2px,color:#166534
+    style SLM fill:#dbeafe,stroke:#3b82f6,stroke-width:2px,color:#1e40af
+    style LLM fill:#ede9fe,stroke:#8b5cf6,stroke-width:3px,color:#5b21b6
 ```
 
 ### Approach Rules
