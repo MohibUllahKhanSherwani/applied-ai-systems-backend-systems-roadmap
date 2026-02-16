@@ -73,12 +73,16 @@ Always attempt lower-complexity solutions first.
 ```mermaid
 quadrantChart
     title Tool Selection Matrix
-    x-axis Low Latency --> High Latency
-    y-axis Low Intelligence --> High Intelligence
-    "Regex" : [0.1, 0.2]
-    "Classical ML" : [0.3, 0.4]
-    "Fine-tuned SLM" : [0.5, 0.7]
-    "General LLM" : [0.9, 0.9]
+    x-axis "Low Latency" --> "High Latency"
+    y-axis "Low Intelligence" --> "High Intelligence"
+    quadrant-1 "High Cost / Low Return"
+    quadrant-2 "Reasoning Heavy (LLM)"
+    quadrant-3 "Deterministic (Regex/Rules)"
+    quadrant-4 "Efficient Patterns (ML)"
+    "Regex": [0.15, 0.25]
+    "Classical ML": [0.45, 0.45]
+    "Fine-tuned SLM": [0.65, 0.75]
+    "General LLM": [0.90, 0.90]
 ```
 
 ---
