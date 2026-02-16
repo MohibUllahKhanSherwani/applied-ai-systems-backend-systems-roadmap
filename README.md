@@ -70,12 +70,13 @@ Always attempt lower-complexity solutions first.
 | **General LLM** | Synthesis / Reasoning | Low | High | High |
 
 > **Hard Rule:** If a deterministic solution works → LLM is forbidden.
+```mermaid
 graph TD
     A[Problem] --> B[Regex / Rules]
     B --> C[Traditional ML]
     C --> D[Fine-tuned SLM]
     D --> E[General LLM]
-
+```
 ---
 
 ## 5️⃣ Black-Box vs. Glass-Box Systems
