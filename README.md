@@ -8,6 +8,8 @@ Phase 0 is not about tools. It is about **intellectual discipline**. Before buil
 
 ## 1️⃣ Deterministic vs. Probabilistic Systems
 
+Understanding the core difference between these two paradigms is the first step in robust AI engineering.
+
 | Feature | Deterministic Systems | Probabilistic Systems (LLMs) |
 | :--- | :--- | :--- |
 | **Logic** | Same input → same output | Output sampled from distribution |
@@ -20,47 +22,48 @@ Phase 0 is not about tools. It is about **intellectual discipline**. Before buil
 
 ## 2️⃣ Control Flow vs. Inference
 
-* **Control Flow:** Explicit branching via `if/else`, state machines, and API contracts.
-* **Inference:** Implicit decisions via classification, generation, or embedding similarity.
+*   **Control Flow:** Explicit branching via `if/else`, state machines, and API contracts.
+*   **Inference:** Implicit decisions via classification, generation, or embedding similarity.
 
-**The Cardinal Architectural Rule:**
+> [!IMPORTANT]
+> **The Cardinal Architectural Rule:**
 > **Inference must NEVER replace control flow.**
 
-* **Allowed:** LLM suggests a classification → output is validated → mapped to an internal Enum.
-* **Forbidden:** LLM directly deciding the business logic execution path or calling functions without a deterministic middle layer.
+*   **Allowed:** LLM suggests a classification → output is validated → mapped to an internal Enum.
+*   **Forbidden:** LLM directly deciding the business logic execution path or calling functions without a deterministic middle layer.
 
 ---
 
 ## 3️⃣ Strategic Skepticism — Reliability Rules
 
-1. **Deterministic Wrappers**
-   * No raw LLM output touches core logic.
-   * Enforce **Pydantic / JSON schema** validation.
-   * Reject malformed output and version prompts as code.
-   * Fail loudly if validation fails.
+### 🛡️ Deterministic Wrappers
+*   No raw LLM output touches core logic.
+*   Enforce **Pydantic / JSON schema** validation.
+*   Reject malformed output and version prompts as code.
+*   Fail loudly if validation fails.
 
-2. **Explicit Failure > Silent Hallucination**
-   * A "refusal" or an error is infinitely better than a wrong answer.
-   * Include a **refusal path** and a **fallback path** for every probabilistic endpoint.
-   * Empty retrieval → bypass generation.
+### 🚩 Explicit Failure > Silent Hallucination
+*   A "refusal" or an error is infinitely better than a wrong answer.
+*   Include a **refusal path** and a **fallback path** for every probabilistic endpoint.
+*   Empty retrieval → bypass generation.
 
-3. **Calibration Awareness**
-   * LLMs are often overconfident in ambiguous tasks.
-   * Treat high-confidence scores in open-ended tasks as suspicious.
-   * Add verification layers for high-risk outputs.
+### ⚖️ Calibration Awareness
+*   LLMs are often overconfident in ambiguous tasks.
+*   Treat high-confidence scores in open-ended tasks as suspicious.
+*   Add verification layers for high-risk outputs.
 
-4. **The Opacity Trap**
-   * No abstraction without visibility. Glass-box > Black-box.
-   * Log all raw prompts and responses for auditability.
-   * Intercept API calls if necessary.
+### 🔍 The Opacity Trap
+*   No abstraction without visibility. Glass-box > Black-box.
+*   Log all raw prompts and responses for auditability.
+*   Intercept API calls if necessary.
 
 ---
 
-## 4️⃣ The Decision Ladder — Tool Selection Discipline
+## 4️⃣ Tool Selection Discipline
 
-Always attempt lower-complexity solutions first.
+Always attempt lower-complexity solutions first. Use the logic ladder below to decide if an LLM is truly necessary.
 
-### 4️⃣ Selection Criteria
+### 🪜 Selection Criteria
 
 | Layer | When to Use | Auditability | Latency | Cost |
 | :--- | :--- | :--- | :--- | :--- |
@@ -69,111 +72,82 @@ Always attempt lower-complexity solutions first.
 | **Fine-tuned SLM** | Domain extraction | Moderate | Medium | Medium |
 | **General LLM** | Synthesis / Reasoning | Low | High | High |
 
+> [!CAUTION]
 > **Hard Rule:** If a deterministic solution works → LLM is forbidden.
+
 ```mermaid
 graph TD
-    A[Problem] --> B[Regex / Rules]
-    B --> C[Traditional ML]
-    C --> D[Fine-tuned SLM]
-    D --> E[General LLM]
+    A["Problem Identification"] --> B{"Static Patterns?"}
+    B -- Yes --> C["Regex / Rule Engine"]
+    B -- No --> D{"Tabular Data?"}
+    D -- Yes --> E["Traditional ML (Random Forest/XGBoost)"]
+    D -- No --> F{"Domain Specific?"}
+    F -- Yes --> G["Fine-tuned SLM"]
+    F -- No --> H["General LLM (Synthesis/Reasoning)"]
+    
+    style C fill:#f9f,stroke:#333,stroke-width:2px
+    style E fill:#bbf,stroke:#333,stroke-width:2px
+    style G fill:#bfb,stroke:#333,stroke-width:2px
+    style H fill:#fbb,stroke:#333,stroke-width:2px
 ```
+
 ---
 
 ## 5️⃣ Black-Box vs. Glass-Box Systems
 
 Enterprise maturity means: **“We know why it works.”**
 
-* **Log every prompt and response:** Ensure full traceability of the inference path.
-* **Version-control every prompt:** Treat prompts as code, not configuration.
-* **Measure latency + token cost:** Track these metrics per request to avoid "invisible" overhead.
-* **Maintain evaluation datasets (Evals):** Continuous testing against known ground truths.
-* **No invisible reasoning:** Avoid hidden chain-of-thought that isn't logged or auditable.
+*   **Log every prompt and response:** Ensure full traceability of the inference path.
+*   **Version-control every prompt:** Treat prompts as code, not configuration.
+*   **Measure latency + token cost:** Track these metrics per request.
+*   **Maintain evaluation datasets (Evals):** Continuous testing against known ground truths.
+*   **No invisible reasoning:** Avoid hidden chain-of-thought that isn't logged or auditable.
 
 ---
 
-## 6️⃣ Cost, Latency & Reliability (Distributed Systems Reality)
+## 6️⃣ Cost, Latency & Reliability
 
 LLM systems behave like distributed systems and must follow those engineering rigors.
 
 ### A. Timeouts, Retries, and Backoff
-Retries amplify load during failure; "retry storms" can collapse a system.
-* Always use **exponential backoff with jitter**.
-* Timeouts must be deliberate and strictly enforced.
-* Retries are only safe for **idempotent** operations.
-
-
+*   Always use **exponential backoff with jitter** to avoid retry storms.
+*   Timeouts must be deliberate and strictly enforced.
+*   Retries are only safe for **idempotent** operations.
 
 ### B. Idempotency
-An operation is repeatable without changing the result or creating side effects.
-* Every mutating endpoint must support **idempotency keys**.
-* Duplicate execution must not create duplicate effects (e.g., double billing).
-* Response caching should utilize a request hash for consistency.
+*   Every mutating endpoint must support **idempotency keys**.
+*   Duplicate execution must not create duplicate effects (e.g., double billing).
+*   Response caching should utilize a request hash for consistency.
 
 ### C. Tail Latency
-Don't optimize for the average; track the **95th and 99th percentile (p95/p99)**.
-* LLMs have high variance, network dependency, and are prone to throttling.
-* The system must enforce time budgets and provide a fallback when the model hangs.
-
-### D. Cost as a First-Class Constraint
-Cost scales with tokens, context window size, and unnecessary retries.
-* **Design Strategy:** Minimize context, cache embeddings, and avoid unnecessary generation.
-* **Tracking:** Monitor cost per request. If a PSL explanation costs **$0.12**, the deployment must justify that specific business value.
+Don't optimize for the average; track the **p95/p99**.
+*   The system must enforce time budgets and provide a fallback when the model hangs.
 
 ---
 
 ## 7️⃣ When NOT to Use an LLM
 
 An LLM is objectively the wrong tool for:
-* **Deterministic extraction** with static patterns.
-* **Numeric regression** on tabular data.
-* **Regulatory classification** requiring a 1:1 audit trail.
-* **High-frequency, low-latency microservices** (<20ms).
-* **Replacement** for SQL, CASE statements, Random Forest, or rule engines.
+*   **Deterministic extraction** with static patterns.
+*   **Numeric regression** on tabular data.
+*   **Regulatory classification** requiring a 1:1 audit trail.
+*   **High-frequency, low-latency microservices** (<20ms).
+*   **Replacement** for SQL, CASE statements, Random Forest, or rule engines.
 
 ---
 
-## 8️⃣ Operational Principles
+## 📚 Sources Studied
 
-* **Validation is Mandatory:** No LLM output touches the system without schema validation.
-* **Fallback Required:** No probabilistic routing without a deterministic fallback.
-* **Version Control:** All prompts must be version-controlled like software.
-* **Zero-Retrieval Policy:** Empty retrieval results → no generation.
-* **Idempotency:** All retries must be idempotent.
-* **The Explanability Bar:** If you cannot explain how it fails, you cannot use it.
+### 🔗 When NOT to Use an LLM
+*   [When Not to Use LLMs](https://www.latent.space/p/when-not-to-use-llms) – *Latent Space*
+*   [Prompt Engineering vs. Reliability Limits](https://hamel.dev/blog/posts/prompt/) – *Hamel Husain*
+*   [Language Models Mostly Know What They Know](https://www.anthropic.com/research/language-models-mostly-know-what-they-know) – *Anthropic Research*
 
-## 📚 Sources Studied (Phase 0)
+### 🔗 Rule-Based → ML → LLM
+*   [LLM Patterns & Decision Trees](https://eugeneyan.com/writing/llm-patterns/) – *Eugene Yan*
+*   [Enterprise AI: The Reality of Integration](https://martinfowler.com/articles/enterpriseAI.html) – *Martin Fowler*
 
-### 1️⃣ When NOT to Use an LLM (Critical)
-**Focus:** Internalizing failure modes, understanding the overconfidence problem, and why deterministic logic must wrap probabilistic outputs.
-
-* [When Not to Use LLMs](https://www.latent.space/p/when-not-to-use-llms) – *Latent Space*
-* [Prompt Engineering vs. Reliability Limits](https://hamel.dev/blog/posts/prompt/) – *Hamel Husain*
-* [Language Models Mostly Know What They Know](https://www.anthropic.com/research/language-models-mostly-know-what-they-know) – *Anthropic Research*
-
----
-
-### 2️⃣ Rule-Based → ML → LLM Decision Ladder
-**Focus:** Choosing the right tool for the job. Identifying when regex or classical ML (Random Forest/XGBoost) beats an LLM in cost, latency, and auditability.
-
-* [LLM Patterns & Decision Trees](https://eugeneyan.com/writing/llm-patterns/) – *Eugene Yan*
-* [Enterprise AI: The Reality of Integration](https://martinfowler.com/articles/enterpriseAI.html) – *Martin Fowler*
-* [LLM vs. Traditional ML: A Comparison](https://www.rudderstack.com/blog/llm-vs-traditional-ml/) – *RudderStack*
-
-
-
----
-
-### 3️⃣ Black-Box vs. Glass-Box Systems
-**Focus:** Observability and explainability. Moving beyond "it works" to "we know exactly why it failed."
-
-* [AI-Augmented Development: Control & Visibility](https://martinfowler.com/articles/ai-augmented-development.html) – *Martin Fowler*
-* [Sparks of Artificial General Intelligence (Evaluation & Opacity Sections)](https://arxiv.org/abs/2303.12712) – *Microsoft Research (Arxiv)*
-
----
-
-### 4️⃣ Cost, Latency, Reliability (Systems View)
-**Focus:** Essential distributed systems engineering. Treating LLM calls as volatile network requests that require rigorous handling.
-
-* [Timeouts, Retries, and Backoff with Jitter](https://aws.amazon.com/builders-library/timeouts-retries-and-backoff-with-jitter/) – *AWS Builders Library*
-* [Making Retries Safe with Idempotent APIs](https://aws.amazon.com/builders-library/making-retries-safe-with-idempotent-APIs/) – *AWS Builders Library*
-* [Idempotency: Avoiding Double-Action in Distributed Systems](https://stripe.com/blog/idempotency) – *Stripe Engineering*
+### 🔗 Systems Reliability (AWS/Stripe)
+*   [Timeouts, Retries, and Backoff with Jitter](https://aws.amazon.com/builders-library/timeouts-retries-and-backoff-with-jitter/)
+*   [Making Retries Safe with Idempotent APIs](https://aws.amazon.com/builders-library/making-retries-safe-with-idempotent-APIs/)
+*   [Idempotency: Avoiding Double-Action](https://stripe.com/blog/idempotency)
