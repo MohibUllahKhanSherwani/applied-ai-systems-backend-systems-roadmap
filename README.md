@@ -70,20 +70,7 @@ Always attempt lower-complexity solutions first.
 | **General LLM** | Synthesis / Reasoning | Low | High | High |
 
 > **Hard Rule:** If a deterministic solution works → LLM is forbidden.
-```mermaid
-quadrantChart
-    title Tool Selection Matrix
-    x-axis "Low Latency" --> "High Latency"
-    y-axis "Low Intelligence" --> "High Intelligence"
-    quadrant-1 "High Cost / Low Return"
-    quadrant-2 "Reasoning Heavy (LLM)"
-    quadrant-3 "Deterministic (Regex/Rules)"
-    quadrant-4 "Efficient Patterns (ML)"
-    "Regex": [0.15, 0.25]
-    "Classical ML": [0.45, 0.45]
-    "Fine-tuned SLM": [0.65, 0.75]
-    "General LLM": [0.90, 0.90]
-```
+graph TD A[Problem] --> B[Regex / Rules] B --> C[Traditional ML] C --> D[Fine-tuned SLM] D --> E[General LLM]
 
 ---
 
