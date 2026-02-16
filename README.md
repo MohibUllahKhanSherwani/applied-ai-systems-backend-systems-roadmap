@@ -70,7 +70,11 @@ Always attempt lower-complexity solutions first.
 | **General LLM** | Synthesis / Reasoning | Low | High | High |
 
 > **Hard Rule:** If a deterministic solution works → LLM is forbidden.
-graph TD A[Problem] --> B[Regex / Rules] B --> C[Traditional ML] C --> D[Fine-tuned SLM] D --> E[General LLM]
+graph TD
+    A[Problem] --> B[Regex / Rules]
+    B --> C[Traditional ML]
+    C --> D[Fine-tuned SLM]
+    D --> E[General LLM]
 
 ---
 
