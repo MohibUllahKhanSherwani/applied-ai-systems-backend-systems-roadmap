@@ -1,6 +1,6 @@
 # Applied AI + Backend Systems Engineering Roadmap
 
-### Note: Go to the respective branch to access it's contents
+### Note: Go to the readme branch to access it's contents
 This repository documents my structured journey toward becoming an Applied AI / LLM Systems Engineer. It contains all study notes, architectural principles, design rules, experiments, and implementation artifacts across every phase of the roadmap, from systems mindset and probabilistic reasoning to production-grade AI services with observability, evaluation, and deployment discipline.
 
 The focus is system-first engineering, not trend-driven experimentation. Every concept is tied to concrete implementation, failure modes, cost considerations, and production reliability.
@@ -8,6 +8,7 @@ The focus is system-first engineering, not trend-driven experimentation. Every c
 The repository covers:
 
 Phase 0: Systems mindset, AI design rules, deterministic vs probabilistic thinking
+Phase 0.md
 
 Phase 1–2: RAG engineering, structured LLM usage, failure-aware AI systems
 
