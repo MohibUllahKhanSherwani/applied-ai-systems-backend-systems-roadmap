@@ -8,7 +8,7 @@ The focus is system-first engineering, not trend-driven experimentation. Every c
 The repository covers:
 
 Phase 0: Systems mindset, AI design rules, deterministic vs probabilistic thinking
-Phase 0.md
+[Phase 0.md](./Phase%200.md)
 
 Phase 1–2: RAG engineering, structured LLM usage, failure-aware AI systems
 
