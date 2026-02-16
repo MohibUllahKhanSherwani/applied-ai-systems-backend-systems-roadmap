@@ -139,13 +139,11 @@ An LLM is objectively the wrong tool for:
 ## 📚 Sources Studied
 
 ### 🔗 When NOT to Use an LLM
-*   [When Not to Use LLMs](https://www.latent.space/p/when-not-to-use-llms) – *Latent Space*
 *   [Prompt Engineering vs. Reliability Limits](https://hamel.dev/blog/posts/prompt/) – *Hamel Husain*
 *   [Language Models Mostly Know What They Know](https://www.anthropic.com/research/language-models-mostly-know-what-they-know) – *Anthropic Research*
 
 ### 🔗 Rule-Based → ML → LLM
 *   [LLM Patterns & Decision Trees](https://eugeneyan.com/writing/llm-patterns/) – *Eugene Yan*
-*   [Enterprise AI: The Reality of Integration](https://martinfowler.com/articles/enterpriseAI.html) – *Martin Fowler*
 
 ### 🔗 Systems Reliability (AWS/Stripe)
 *   [Timeouts, Retries, and Backoff with Jitter](https://aws.amazon.com/builders-library/timeouts-retries-and-backoff-with-jitter/)
