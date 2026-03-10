@@ -85,10 +85,10 @@ graph TD
     F -- Yes --> G["Fine-tuned SLM"]
     F -- No --> H["General LLM (Synthesis/Reasoning)"]
     
-    style C fill:#f9f,stroke:#333,stroke-width:2px
-    style E fill:#bbf,stroke:#333,stroke-width:2px
-    style G fill:#bfb,stroke:#333,stroke-width:2px
-    style H fill:#fbb,stroke:#333,stroke-width:2px
+    style C fill:#0d47a1,stroke:#333,stroke-width:2px,color:#fff
+    style E fill:#512da8,stroke:#333,stroke-width:2px,color:#fff
+    style G fill:#1b5e20,stroke:#333,stroke-width:2px,color:#fff
+    style H fill:#b71c1c,stroke:#333,stroke-width:2px,color:#fff
 ```
 
 ---
