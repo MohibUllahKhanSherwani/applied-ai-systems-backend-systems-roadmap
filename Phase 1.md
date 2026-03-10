@@ -4,6 +4,8 @@
 
 Phase 1 turns the Phase 0 principles into a working AI system.  
 The target was not "chatbot behavior." The target was controlled retrieval, grounded responses, explicit uncertainty handling, and measurable safety.
+Project repo: 
+- [PSL-ExplainRAG_V1 Repository](https://github.com/MohibUllahKhanSherwani/PSL-ExplainRAG_V1)
 
 ---
 
@@ -166,7 +168,6 @@ Key conclusion:
 
 ## 10. References
 
-- [PSL-ExplainRAG_V1 Repository](https://github.com/MohibUllahKhanSherwani/PSL-ExplainRAG_V1)
 - [LangChain Documentation](https://python.langchain.com/docs/introduction/)
 - [FAISS Documentation](https://faiss.ai/)
 - [FastAPI Documentation](https://fastapi.tiangolo.com/)
